@@ -1,0 +1,14 @@
+main objects:
+    object name: "User Object"
+    sub objects:
+    	object name: "Auth Object"
+    	object name: "Perm Object"
+    services:
+    	service name: "User Entity"
+
+    object name: "Project Object"
+    sub objects:
+    	object name: "Stage"
+    	object name: "Task"
+    services:
+    	service name: "User Entity"

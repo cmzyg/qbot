@@ -46,7 +46,12 @@ class DefaultController extends Controller
         return $info;
     }
 
-    public function contactAction()
+    public function projectsAction()
+    {
+        return $this->render('AppBundle:default:index.html.twig');
+    }
+
+    public function projectAction($id)
     {
         return $this->render('AppBundle:default:index.html.twig');
     }

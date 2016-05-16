@@ -132,16 +132,30 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
-        // contact
-        if ($pathinfo === '/contact') {
-            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_contact;
-            }
+        if (0 === strpos($pathinfo, '/project')) {
+            // projects
+            if ($pathinfo === '/projects') {
+                if ($this->context->getMethod() != 'ANY') {
+                    $allow[] = 'ANY';
+                    goto not_projects;
+                }
 
-            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::contactAction',  '_route' => 'contact',);
+                return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::projectsAction',  '_route' => 'projects',);
+            }
+            not_projects:
+
+            // project
+            if (preg_match('#^/project/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_project;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'project')), array (  '_controller' => 'AppBundle\\Controller\\DefaultController::projectAction',));
+            }
+            not_project:
+
         }
-        not_contact:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
