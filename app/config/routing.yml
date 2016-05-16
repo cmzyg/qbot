@@ -10,7 +10,14 @@ projects:
         _method:  ANY
 
 project:
-    pattern:  /project/{id}
+    pattern:  /project/{projectID}
     defaults: { _controller: AppBundle:Default:project }
+    requirements:
+        _method:  GET
+
+
+client:
+    pattern:  /client/{clientID}
+    defaults: { _controller: AppBundle:Default:client }
     requirements:
         _method:  GET
