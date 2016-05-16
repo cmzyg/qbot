@@ -45,4 +45,9 @@ class DefaultController extends Controller
         
         return $info;
     }
+
+    public function contactAction()
+    {
+        return $this->render('AppBundle:default:index.html.twig');
+    }
 }
