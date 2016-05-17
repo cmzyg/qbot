@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title></title>
+
+{% block stylesheets %}
+    <link href="{{ asset('css/styles.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="row-fluid">
+	    <div class="span12">
+			<a class="inline" href="all-projects">All Projects</a>
+			<a class="inline" href="project-overview">Project Overview</a>
+			<a class="inline" href="all-clients">All Clients</a>
+			<a class="inline" href="client-overview">Client Overview</a>
+			<a class="inline" href="create-project">Create Project</a>
+			<a class="inline" href="edit-profile">Edit Profile</a>
+			<a class="inline" href="add-qp-user">Add QP User</a>
+		</div>
+	</div>
+  </div>
+</nav>

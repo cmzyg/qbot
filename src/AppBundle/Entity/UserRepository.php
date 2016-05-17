@@ -10,4 +10,8 @@ namespace AppBundle\Entity;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getText()
+	{
+		return 'aaa';
+	}
 }

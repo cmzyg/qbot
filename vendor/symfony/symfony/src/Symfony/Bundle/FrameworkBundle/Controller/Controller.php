@@ -26,6 +26,7 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Controller is a simple implementation of a Controller.
@@ -36,6 +37,12 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
  */
 class Controller extends ContainerAware
 {
+    public $session;
+
+    public function __construct()
+    {
+
+    }
     /**
      * Generates a URL from the given parameters.
      *
@@ -377,5 +384,37 @@ class Controller extends ContainerAware
         }
 
         return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($id, $token));
+    }
+
+    protected function getObject($object, $objectName, $methodName = null)
+    {
+        if(!is_array($object))
+        {
+            $newObject = $this->container->get($object);
+        }
+        else
+        {
+            foreach($object as $obj)
+            {
+                $newObject[] = $this->container->get($obj);
+            }
+        }
+
+        return $newObject;
+    }
+
+    protected function pageExists($id)
+    {
+        if(is_null($id) || !is_int($id))
+        {
+            return new NotFoundHttpException();
+        }
+    }
+
+    protected function isLoggedIn()
+    {
+        $session = new Session();
+
+        return $session->get('user') === null ? false : true;
     }
 }

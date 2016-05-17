@@ -1,0 +1,19 @@
+AppBundle\Entity\Section:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Entity\SectionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        sectionName:
+            type: string
+            length: 255
+            column: section_name
+        projectId:
+            type: integer
+            column: project_id
+    lifecycleCallbacks: {  }

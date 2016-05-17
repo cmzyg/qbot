@@ -1,0 +1,23 @@
+{% include 'AppBundle::header.html.twig' %}
+
+{% block body %}
+
+	{% for proj in project %}
+		<strong>Name:</strong> {{ proj.name }}
+		<br />
+		<strong>Value:</strong> {{ proj.value }}
+		<br />
+		<strong>Due Date:</strong> {{ proj.dueDate|date('Y-m-d') }}
+	{% endfor %}
+
+	<hr />
+
+	{% set count = 1 %}
+	{% for sect in section %}
+		<strong>Step {{ count }}:</strong> {{ sect.sectionName }} <br />
+		{% set count = count + 1 %}
+	{% endfor %}  
+
+{% endblock %}
+
+

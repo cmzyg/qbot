@@ -1,0 +1,21 @@
+AppBundle\Entity\Project:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Entity\ProjectRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        value:
+            type: string
+            length: 255
+        dueDate:
+            type: datetime
+            column: due_date
+    lifecycleCallbacks: {  }

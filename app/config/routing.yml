@@ -5,13 +5,19 @@ app:
 
 projects:
     pattern:  /projects
-    defaults: { _controller: AppBundle:Default:projects }
+    defaults: { _controller: AppBundle:Projects:projects }
     requirements:
-        _method:  ANY
+        _method:  GET
 
 project:
     pattern:  /project/{projectID}
-    defaults: { _controller: AppBundle:Default:project }
+    defaults: { _controller: AppBundle:Projects:project }
+    requirements:
+        _method:  GET
+
+project-overview:
+    pattern:  /project-overview
+    defaults: { _controller: AppBundle:Projects:projectOverview }
     requirements:
         _method:  GET
 
@@ -21,3 +27,17 @@ client:
     defaults: { _controller: AppBundle:Default:client }
     requirements:
         _method:  GET
+
+login:
+    pattern:  /login
+    defaults: { _controller: AppBundle:Default:login }
+    requirements:
+        _method:  GET
+
+
+error404:
+    path: /404
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TwigBundle:Exception:error404.html.twig
+

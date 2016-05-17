@@ -127,34 +127,67 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // homepage
-        if ($pathinfo === '/home') {
-            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
-        }
-
         if (0 === strpos($pathinfo, '/project')) {
             // projects
             if ($pathinfo === '/projects') {
-                if ($this->context->getMethod() != 'ANY') {
-                    $allow[] = 'ANY';
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
                     goto not_projects;
                 }
 
-                return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::projectsAction',  '_route' => 'projects',);
+                return array (  '_controller' => 'AppBundle\\Controller\\ProjectsController::projectsAction',  '_route' => 'projects',);
             }
             not_projects:
 
             // project
-            if (preg_match('#^/project/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            if (preg_match('#^/project/(?P<projectID>[^/]++)$#s', $pathinfo, $matches)) {
                 if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
                     $allow = array_merge($allow, array('GET', 'HEAD'));
                     goto not_project;
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'project')), array (  '_controller' => 'AppBundle\\Controller\\DefaultController::projectAction',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'project')), array (  '_controller' => 'AppBundle\\Controller\\ProjectsController::projectAction',));
             }
             not_project:
 
+            // project-overview
+            if ($pathinfo === '/project-overview') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_projectoverview;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\ProjectsController::projectOverviewAction',  '_route' => 'project-overview',);
+            }
+            not_projectoverview:
+
+        }
+
+        // client
+        if (0 === strpos($pathinfo, '/client') && preg_match('#^/client/(?P<clientID>[^/]++)$#s', $pathinfo, $matches)) {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_client;
+            }
+
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'client')), array (  '_controller' => 'AppBundle\\Controller\\DefaultController::clientAction',));
+        }
+        not_client:
+
+        // login
+        if ($pathinfo === '/login') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_login;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::loginAction',  '_route' => 'login',);
+        }
+        not_login:
+
+        // error404
+        if ($pathinfo === '/404') {
+            return array (  '_controller' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction',  'template' => 'TwigBundle:Exception:error404.html.twig',  '_route' => 'error404',);
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

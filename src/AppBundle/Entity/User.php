@@ -27,6 +27,11 @@ class User
      */
     private $password;
 
+    /**
+     * @var string
+     */
+    private $company;
+
 
     /**
      * Get id
@@ -108,6 +113,30 @@ class User
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Set company
+     *
+     * @param string $company
+     *
+     * @return User
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }
 

@@ -60,6 +60,7 @@ class appDevDebugProjectContainer extends Container
             'debug.event_dispatcher' => 'getDebug_EventDispatcherService',
             'debug.stopwatch' => 'getDebug_StopwatchService',
             'debug.templating.engine.php' => 'getDebug_Templating_Engine_PhpService',
+            'doc' => 'getDocService',
             'doctrine' => 'getDoctrineService',
             'doctrine.dbal.connection_factory' => 'getDoctrine_Dbal_ConnectionFactoryService',
             'doctrine.dbal.default_connection' => 'getDoctrine_Dbal_DefaultConnectionService',
@@ -144,6 +145,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.translation' => 'getMonolog_Logger_TranslationService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
+            'project_repository' => 'getProjectRepositoryService',
             'property_accessor' => 'getPropertyAccessorService',
             'request' => 'getRequestService',
             'request_stack' => 'getRequestStackService',
@@ -152,6 +154,7 @@ class appDevDebugProjectContainer extends Container
             'router.request_context' => 'getRouter_RequestContextService',
             'router_listener' => 'getRouterListenerService',
             'routing.loader' => 'getRouting_LoaderService',
+            'section_repository' => 'getSectionRepositoryService',
             'security.access.decision_manager' => 'getSecurity_Access_DecisionManagerService',
             'security.authentication.manager' => 'getSecurity_Authentication_ManagerService',
             'security.authentication.trust_resolver' => 'getSecurity_Authentication_TrustResolverService',
@@ -198,6 +201,7 @@ class appDevDebugProjectContainer extends Container
             'swiftmailer.mailer.default.transport' => 'getSwiftmailer_Mailer_Default_TransportService',
             'swiftmailer.mailer.default.transport.eventdispatcher' => 'getSwiftmailer_Mailer_Default_Transport_EventdispatcherService',
             'swiftmailer.mailer.default.transport.real' => 'getSwiftmailer_Mailer_Default_Transport_RealService',
+            'task_repository' => 'getTaskRepositoryService',
             'templating' => 'getTemplatingService',
             'templating.filename_parser' => 'getTemplating_FilenameParserService',
             'templating.globals' => 'getTemplating_GlobalsService',
@@ -253,6 +257,7 @@ class appDevDebugProjectContainer extends Container
             'twig.profile' => 'getTwig_ProfileService',
             'twig.translation.extractor' => 'getTwig_Translation_ExtractorService',
             'uri_signer' => 'getUriSignerService',
+            'user_repository' => 'getUserRepositoryService',
             'validator' => 'getValidatorService',
             'validator.builder' => 'getValidator_BuilderService',
             'validator.email' => 'getValidator_EmailService',
@@ -619,6 +624,19 @@ class appDevDebugProjectContainer extends Container
         $instance->setHelpers(array('assets' => 'templating.helper.assets', 'router' => 'templating.helper.router', 'slots' => 'templating.helper.slots', 'request' => 'templating.helper.request', 'session' => 'templating.helper.session', 'actions' => 'templating.helper.actions', 'code' => 'templating.helper.code', 'translator' => 'templating.helper.translator', 'form' => 'templating.helper.form', 'stopwatch' => 'templating.helper.stopwatch', 'logout_url' => 'templating.helper.logout_url', 'security' => 'templating.helper.security', 'assetic' => 'assetic.helper.dynamic'));
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'doc' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Controller\DefaultController A AppBundle\Controller\DefaultController instance.
+     */
+    protected function getDocService()
+    {
+        return $this->services['doc'] = new \AppBundle\Controller\DefaultController($this->get('doctrine.orm.default_entity_manager'));
     }
 
     /**
@@ -1866,6 +1884,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'project_repository' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Repository\ProjectRepository A AppBundle\Repository\ProjectRepository instance.
+     */
+    protected function getProjectRepositoryService()
+    {
+        return $this->services['project_repository'] = $this->get('doctrine')->getRepository('AppBundle:Project');
+    }
+
+    /**
      * Gets the 'property_accessor' service.
      *
      * This service is shared.
@@ -1976,6 +2007,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'section_repository' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Repository\SectionRepository A AppBundle\Repository\SectionRepository instance.
+     */
+    protected function getSectionRepositoryService()
+    {
+        return $this->services['section_repository'] = $this->get('doctrine')->getRepository('AppBundle:Section');
+    }
+
+    /**
      * Gets the 'security.authentication_utils' service.
      *
      * This service is shared.
@@ -2083,7 +2127,7 @@ class appDevDebugProjectContainer extends Container
 
         $e = new \Symfony\Component\Security\Http\AccessMap();
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($e, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '5739f84d441ea3.00226052', $a, $c), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $e, $c)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), new \Symfony\Component\Security\Http\HttpUtils($d, $d), 'main', NULL, NULL, NULL, $a, false));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($e, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '573b31037e5bd9.56832168', $a, $c), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $e, $c)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), new \Symfony\Component\Security\Http\HttpUtils($d, $d), 'main', NULL, NULL, NULL, $a, false));
     }
 
     /**
@@ -2514,6 +2558,19 @@ class appDevDebugProjectContainer extends Container
         $instance->setSourceIp(NULL);
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'task_repository' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Repository\TaskRepository A AppBundle\Repository\TaskRepository instance.
+     */
+    protected function getTaskRepositoryService()
+    {
+        return $this->services['task_repository'] = $this->get('doctrine')->getRepository('AppBundle:Task');
     }
 
     /**
@@ -3301,6 +3358,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'user_repository' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Repository\UserRepository A AppBundle\Repository\UserRepository instance.
+     */
+    protected function getUserRepositoryService()
+    {
+        return $this->services['user_repository'] = $this->get('doctrine')->getRepository('AppBundle:User');
+    }
+
+    /**
      * Gets the 'validator' service.
      *
      * This service is shared.
@@ -3551,7 +3621,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('5739f84d441ea3.00226052')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('573b31037e5bd9.56832168')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3732,7 +3802,7 @@ class appDevDebugProjectContainer extends Container
             'kernel.root_dir' => $this->targetDirs[2],
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
-            'kernel.name' => 'app',
+            'kernel.name' => 'ap_',
             'kernel.cache_dir' => __DIR__,
             'kernel.logs_dir' => ($this->targetDirs[2].'/logs'),
             'kernel.bundles' => array(
@@ -3762,6 +3832,10 @@ class appDevDebugProjectContainer extends Container
             'mailer_user' => NULL,
             'mailer_password' => NULL,
             'secret' => '226df5d674e221730a6c6b5d027099b4c6c8e4da',
+            'entity.user_entity' => 'AppBundle:User',
+            'entity.project_entity' => 'AppBundle:Project',
+            'entity.section_entity' => 'AppBundle:Section',
+            'entity.task_entity' => 'AppBundle:Task',
             'locale' => 'en',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
